@@ -1,0 +1,4 @@
+*.png
+report.html
+__pycache__/
+*.pyc

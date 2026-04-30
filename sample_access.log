@@ -1,0 +1,59 @@
+192.168.1.10 - - [29/Apr/2026:08:01:12 +0530] "GET /index.html HTTP/1.1" 200 1024 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.10 - - [29/Apr/2026:08:01:15 +0530] "GET /about.html HTTP/1.1" 200 512 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.22 - - [29/Apr/2026:08:02:40 +0530] "GET /contact.html HTTP/1.1" 200 768 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X)"
+192.168.1.22 - - [29/Apr/2026:08:03:01 +0530] "POST /login HTTP/1.1" 200 256 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X)"
+192.168.1.33 - - [29/Apr/2026:08:05:20 +0530] "GET /products.html HTTP/1.1" 200 2048 "-" "Mozilla/5.0 (X11; Linux x86_64)"
+
+# --- BRUTE FORCE ATTACK (10.0.0.5 hammering /login with 401s) ---
+10.0.0.5 - - [29/Apr/2026:08:10:01 +0530] "POST /login HTTP/1.1" 401 128 "-" "Mozilla/5.0"
+10.0.0.5 - - [29/Apr/2026:08:10:03 +0530] "POST /login HTTP/1.1" 401 128 "-" "Mozilla/5.0"
+10.0.0.5 - - [29/Apr/2026:08:10:05 +0530] "POST /login HTTP/1.1" 401 128 "-" "Mozilla/5.0"
+10.0.0.5 - - [29/Apr/2026:08:10:07 +0530] "POST /login HTTP/1.1" 401 128 "-" "Mozilla/5.0"
+10.0.0.5 - - [29/Apr/2026:08:10:09 +0530] "POST /login HTTP/1.1" 401 128 "-" "Mozilla/5.0"
+10.0.0.5 - - [29/Apr/2026:08:10:11 +0530] "POST /login HTTP/1.1" 401 128 "-" "Mozilla/5.0"
+10.0.0.5 - - [29/Apr/2026:08:10:13 +0530] "POST /login HTTP/1.1" 401 128 "-" "Mozilla/5.0"
+10.0.0.5 - - [29/Apr/2026:08:10:15 +0530] "POST /login HTTP/1.1" 401 128 "-" "Mozilla/5.0"
+10.0.0.5 - - [29/Apr/2026:08:10:17 +0530] "POST /login HTTP/1.1" 401 128 "-" "Mozilla/5.0"
+10.0.0.5 - - [29/Apr/2026:08:10:19 +0530] "POST /login HTTP/1.1" 401 128 "-" "Mozilla/5.0"
+10.0.0.5 - - [29/Apr/2026:08:10:21 +0530] "POST /login HTTP/1.1" 401 128 "-" "Mozilla/5.0"
+10.0.0.5 - - [29/Apr/2026:08:10:23 +0530] "POST /login HTTP/1.1" 200 256 "-" "Mozilla/5.0"
+
+# --- SQL INJECTION ATTEMPTS (10.0.0.9) ---
+10.0.0.9 - - [29/Apr/2026:08:15:44 +0530] "GET /products?id=1' OR '1'='1 HTTP/1.1" 500 512 "-" "Mozilla/5.0"
+10.0.0.9 - - [29/Apr/2026:08:15:46 +0530] "GET /products?id=1 UNION SELECT username,password FROM users-- HTTP/1.1" 500 512 "-" "Mozilla/5.0"
+10.0.0.9 - - [29/Apr/2026:08:15:48 +0530] "GET /login?user=admin'-- HTTP/1.1" 200 256 "-" "Mozilla/5.0"
+10.0.0.9 - - [29/Apr/2026:08:15:50 +0530] "GET /search?q=1; DROP TABLE users-- HTTP/1.1" 500 512 "-" "Mozilla/5.0"
+
+# --- DIRECTORY TRAVERSAL ATTEMPTS (10.0.0.7) ---
+10.0.0.7 - - [29/Apr/2026:08:20:10 +0530] "GET /../../../../etc/passwd HTTP/1.1" 403 256 "-" "Mozilla/5.0"
+10.0.0.7 - - [29/Apr/2026:08:20:12 +0530] "GET /files/../../../etc/shadow HTTP/1.1" 403 256 "-" "Mozilla/5.0"
+10.0.0.7 - - [29/Apr/2026:08:20:14 +0530] "GET /static/../../config.php HTTP/1.1" 403 256 "-" "Mozilla/5.0"
+
+# --- SCANNER USER AGENTS (10.0.0.11) ---
+10.0.0.11 - - [29/Apr/2026:08:25:01 +0530] "GET /index.html HTTP/1.1" 200 1024 "-" "sqlmap/1.7.8"
+10.0.0.11 - - [29/Apr/2026:08:25:03 +0530] "GET /login HTTP/1.1" 200 256 "-" "sqlmap/1.7.8"
+10.0.0.11 - - [29/Apr/2026:08:25:33 +0530] "GET /admin HTTP/1.1" 404 128 "-" "Nikto/2.1.6"
+10.0.0.11 - - [29/Apr/2026:08:25:35 +0530] "GET /phpmyadmin HTTP/1.1" 404 128 "-" "Nikto/2.1.6"
+10.0.0.11 - - [29/Apr/2026:08:25:37 +0530] "GET /.env HTTP/1.1" 404 128 "-" "Nikto/2.1.6"
+
+# --- PORT/DIRECTORY SCAN (10.0.0.13 hitting many non-existent paths) ---
+10.0.0.13 - - [29/Apr/2026:08:30:00 +0530] "GET /admin HTTP/1.1" 404 128 "-" "Mozilla/5.0"
+10.0.0.13 - - [29/Apr/2026:08:30:01 +0530] "GET /wp-admin HTTP/1.1" 404 128 "-" "Mozilla/5.0"
+10.0.0.13 - - [29/Apr/2026:08:30:02 +0530] "GET /phpmyadmin HTTP/1.1" 404 128 "-" "Mozilla/5.0"
+10.0.0.13 - - [29/Apr/2026:08:30:03 +0530] "GET /.git HTTP/1.1" 404 128 "-" "Mozilla/5.0"
+10.0.0.13 - - [29/Apr/2026:08:30:04 +0530] "GET /.env HTTP/1.1" 404 128 "-" "Mozilla/5.0"
+10.0.0.13 - - [29/Apr/2026:08:30:05 +0530] "GET /config.php HTTP/1.1" 404 128 "-" "Mozilla/5.0"
+10.0.0.13 - - [29/Apr/2026:08:30:06 +0530] "GET /backup.zip HTTP/1.1" 404 128 "-" "Mozilla/5.0"
+10.0.0.13 - - [29/Apr/2026:08:30:07 +0530] "GET /db.sql HTTP/1.1" 404 128 "-" "Mozilla/5.0"
+10.0.0.13 - - [29/Apr/2026:08:30:08 +0530] "GET /shell.php HTTP/1.1" 404 128 "-" "Mozilla/5.0"
+10.0.0.13 - - [29/Apr/2026:08:30:09 +0530] "GET /uploads HTTP/1.1" 404 128 "-" "Mozilla/5.0"
+
+# --- CLEARTEXT PASSWORD SUBMISSION (10.0.0.15 over HTTP) ---
+10.0.0.15 - - [29/Apr/2026:08:35:22 +0530] "POST /login HTTP/1.1" 200 256 "-" "Mozilla/5.0 (Windows NT 10.0)" "username=admin&password=secret123"
+10.0.0.15 - - [29/Apr/2026:08:35:45 +0530] "POST /register HTTP/1.1" 200 512 "-" "Mozilla/5.0 (Windows NT 10.0)" "username=newuser&passwd=hunter2"
+
+# --- NORMAL TRAFFIC RESUMING ---
+192.168.1.44 - - [29/Apr/2026:08:40:10 +0530] "GET /index.html HTTP/1.1" 200 1024 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0)"
+192.168.1.44 - - [29/Apr/2026:08:40:15 +0530] "GET /products.html HTTP/1.1" 200 2048 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0)"
+192.168.1.55 - - [29/Apr/2026:08:41:00 +0530] "GET /about.html HTTP/1.1" 200 512 "-" "Mozilla/5.0 (Windows NT 10.0)"
+192.168.1.55 - - [29/Apr/2026:08:41:30 +0530] "POST /contact HTTP/1.1" 200 256 "-" "Mozilla/5.0 (Windows NT 10.0)"
